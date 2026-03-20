@@ -5,6 +5,7 @@ src/services.py — STT / LLM / TTS / GHL integrations
 import re
 import struct
 import base64
+import unicodedata
 import httpx
 import anthropic
 from elevenlabs.client import ElevenLabs
@@ -175,6 +176,26 @@ def _route_tts(text: str, mulaw: bool) -> bytes:
     return b"".join(parts)
 
 
+def clean_for_tts(text: str) -> str:
+    """Remove emojis, markdown, and symbols that sound bad when spoken aloud."""
+    # Strip markdown bold/italic/headers
+    text = re.sub(r"\*{1,3}(.*?)\*{1,3}", r"\1", text)
+    text = re.sub(r"#{1,6}\s*", "", text)
+    text = re.sub(r"`{1,3}.*?`{1,3}", "", text, flags=re.DOTALL)
+    # Strip emojis and other symbols
+    cleaned = []
+    for char in text:
+        cat = unicodedata.category(char)
+        # Keep: letters (L), numbers (N), punctuation (P), spaces (Z), Ethiopic
+        if cat.startswith(("L", "N", "P", "Z")) or char in "\n ":
+            cleaned.append(char)
+    text = "".join(cleaned)
+    # Collapse extra whitespace/newlines
+    text = re.sub(r"\n{2,}", "\n", text)
+    text = re.sub(r" {2,}", " ", text)
+    return text.strip()
+
+
 def text_to_speech(text: str, language: str = "auto") -> bytes:
     """Convert text to mulaw audio bytes compatible with Twilio.
 
@@ -182,6 +203,9 @@ def text_to_speech(text: str, language: str = "auto") -> bytes:
     language="english" → always ElevenLabs
     language="auto"    → auto-detect from text content
     """
+    text = clean_for_tts(text)
+    if not text:
+        return b""
     if language == "amharic":
         return _google_tts(text, mulaw=True)
     if language == "english":
