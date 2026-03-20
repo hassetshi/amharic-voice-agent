@@ -8,6 +8,7 @@ import json
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Optional
 
 COMPANIES_DIR = Path(__file__).parent.parent / "companies"
 
@@ -26,6 +27,7 @@ class Company:
     greeting_amharic: str
     greeting_english: str
     knowledge:        str = ""     # full text of knowledge.txt
+    rag:              object = None  # RAGIndex built at startup
 
 
 # ── Load all companies at startup ────────────────────────────────────────────
@@ -69,6 +71,11 @@ def _load_all():
                 greeting_english = cfg.get("greeting_english", ""),
                 knowledge        = knowledge,
             )
+            # Build RAG index from knowledge base
+            if knowledge:
+                from .rag import RAGIndex
+                company.rag = RAGIndex(knowledge)
+
             _registry[company.id] = company
             for number in company.twilio_numbers:
                 _number_map[number] = company

@@ -55,6 +55,13 @@ async def generate_response(session: CallSession, user_text: str,
 
     system = get_system_prompt(company, session.language) if company else AMHARIC_SYSTEM_PROMPT
 
+    # ── RAG: inject relevant knowledge chunks for this query ────────────
+    if company and company.rag and not is_greeting and user_text.strip():
+        context = company.rag.search(user_text, top_k=3)
+        if context:
+            system += f"\n\n══ RETRIEVED CONTEXT (use this to answer precisely) ══\n{context}"
+            print(f"[RAG] Injected {len(context)} chars of context")
+
     try:
         response = await anthropic_client.messages.create(
             model=config.ANTHROPIC_MODEL,
