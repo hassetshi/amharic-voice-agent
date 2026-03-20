@@ -1,0 +1,13 @@
+{
+  "id": "amazon_consulting",
+  "name": "Amazon Consulting LLC",
+  "phone": "(240) 641-1515",
+  "address": "914 Silver Spring Ave, Silver Spring, MD 20910",
+  "website": "dmvamazon.com",
+  "hours": "Mon-Fri 9AM-6PM | Sat 10AM-4PM | Sun Closed",
+  "language": "amharic",
+  "twilio_numbers": ["+13013047045"],
+  "ghl_webhook_url": "",
+  "greeting_amharic": "ሰላም! ወደ አማዞን ኮንሰልቲንግ እንኳን ደህና መጡ። እንዴት ልረዳዎ እችላለሁ?",
+  "greeting_english": "Hello! Welcome to Amazon Consulting. How can I help you today?"
+}

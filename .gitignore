@@ -1,0 +1,28 @@
+# Secrets — NEVER commit
+.env
+*.env
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# Audio temp files
+*.mp3
+*.wav
+audio_samples/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# ngrok
+.ngrok*

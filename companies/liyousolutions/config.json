@@ -1,0 +1,13 @@
+{
+  "id": "liyousolutions",
+  "name": "Liyou Solutions",
+  "phone": "YOUR_BUSINESS_PHONE",
+  "address": "YOUR_ADDRESS",
+  "website": "YOUR_WEBSITE",
+  "hours": "Mon-Fri 9AM-5PM | Sat 10AM-3PM | Sun Closed",
+  "language": "amharic",
+  "twilio_numbers": ["YOUR_TWILIO_NUMBER"],
+  "ghl_webhook_url": "",
+  "greeting_amharic": "ሰላም! ወደ ሊዩ ሶሉሽንስ እንኳን ደህና መጡ። እንዴት ልረዳዎ እችላለሁ?",
+  "greeting_english": "Hello! Welcome to Liyou Solutions. How can I help you today?"
+}
