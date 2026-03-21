@@ -33,6 +33,13 @@ SILENCE_CHUNKS     = 45   # 45 × 20 ms = 900 ms of silence → end of utterance
 MIN_SPEECH_CHUNKS  = 8    # 8 × 20 ms = 160 ms minimum speech to process
 MAX_BUFFER_CHUNKS  = 400  # 400 × 20 ms = 8 s max recording per utterance
 
+# ── Language → Google STT BCP-47 code ────────────────────────────────────────
+_STT_LANG = {
+    "amharic":   "am-ET",
+    "english":   "en-US",
+    "bilingual": "am-ET",   # Amharic is primary for bilingual lines
+}
+
 
 def _mulaw_energy(chunk: bytes) -> float:
     """Approximate amplitude energy from raw mulaw bytes.
@@ -98,8 +105,9 @@ async def media_stream(websocket: WebSocket, call_sid: str):
         await websocket.close()
         return
 
-    # Amharic-only number
-    session.language = "amharic"
+    # Language is already set from company config in incoming_call
+    stt_lang = _STT_LANG.get(session.language, "am-ET")
+    print(f"[PIPELINE] Language={session.language} | STT={stt_lang}")
 
     stream_sid    = None
     audio_buffer  = bytearray()
@@ -122,20 +130,23 @@ async def media_stream(websocket: WebSocket, call_sid: str):
             return
         processing = True
         try:
-            print(f"[STT] Sending {len(audio)} bytes to Google STT (am-ET)...")
-            sentence = await google_stt(audio, language="am-ET")
+            # ── STEP 1: Google STT ──────────────────────────────────────────
+            print(f"[1/4 STT] Sending {len(audio)} bytes → Google STT ({stt_lang})")
+            sentence = await google_stt(audio, language=stt_lang)
             if not sentence:
-                print("[STT] No transcript returned")
+                print("[1/4 STT] No transcript — skipping")
                 return
-
-            print(f"[STT] 🎤 Caller: {sentence}")
+            print(f"[1/4 STT] Caller: {sentence}")
             session.add_user_message(sentence)
             extract_contact_info(session, sentence)
 
+            # ── STEP 2: RAG + STEP 3: LLM (inside generate_response) ───────
             ai_reply = await generate_response(session, sentence)
             session.add_agent_message(ai_reply)
-            print(f"[AI]  🤖 Agent: {ai_reply}")
+            print(f"[3/4 LLM] Agent: {ai_reply}")
 
+            # ── STEP 4: Google TTS → send audio ────────────────────────────
+            print(f"[4/4 TTS] Converting reply to {session.language} audio")
             await send_audio(text_to_speech(ai_reply, session.language))
         finally:
             processing = False
