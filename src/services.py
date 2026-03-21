@@ -99,14 +99,20 @@ def _strip_wav_header(data: bytes) -> bytes:
     return data  # fallback
 
 
-def _google_tts(text: str, mulaw: bool = True) -> bytes:
-    """Google Cloud TTS — native Amharic voice (am-ET-Standard-A)."""
+def _google_tts(text: str, mulaw: bool = True, lang: str = "amharic") -> bytes:
+    """Google Cloud TTS — supports Amharic (am-ET) and English (en-US)."""
+    if lang == "english":
+        lang_code  = "en-US"
+        voice_name = config.GOOGLE_TTS_VOICE_EN
+    else:
+        lang_code  = "am-ET"
+        voice_name = config.GOOGLE_TTS_VOICE_AM
     try:
         payload = {
             "input": {"text": text},
             "voice": {
-                "languageCode": config.GOOGLE_TTS_LANGUAGE,
-                "name": config.GOOGLE_TTS_VOICE,
+                "languageCode": lang_code,
+                "name": voice_name,
             },
             "audioConfig": {
                 "audioEncoding": "MULAW" if mulaw else "MP3",
@@ -164,24 +170,19 @@ def _is_primarily_amharic(text: str) -> bool:
 
 
 def _route_tts(text: str, mulaw: bool) -> bytes:
-    """Route each line to the right TTS engine and concatenate.
+    """Route each line to Google TTS with the correct language voice.
 
-    Primarily-Amharic lines (>=50% Ethiopic chars) → Google TTS (am-ET-Standard-A)
-    English / mixed lines → ElevenLabs (eleven_turbo_v2_5, multilingual)
+    Primarily-Amharic lines (>=50% Ethiopic chars) → Google TTS am-ET voice
+    English / mixed lines → Google TTS en-US voice
     """
-    if not config.GOOGLE_TTS_API_KEY:
-        return _elevenlabs_tts(text, mulaw=mulaw)
-
     lines = [l.strip() for l in text.splitlines() if l.strip()]
     if not lines:
         return b""
 
     parts: list[bytes] = []
     for line in lines:
-        if _is_primarily_amharic(line):
-            parts.append(_google_tts(line, mulaw=mulaw))
-        else:
-            parts.append(_elevenlabs_tts(line, mulaw=mulaw))
+        lang = "amharic" if _is_primarily_amharic(line) else "english"
+        parts.append(_google_tts(line, mulaw=mulaw, lang=lang))
 
     return b"".join(parts)
 
@@ -209,17 +210,18 @@ def clean_for_tts(text: str) -> str:
 def text_to_speech(text: str, language: str = "auto") -> bytes:
     """Convert text to mulaw audio bytes compatible with Twilio.
 
-    language="amharic" → always Google TTS
-    language="english" → always ElevenLabs
-    language="auto"    → auto-detect from text content
+    language="amharic"  → Google TTS am-ET voice
+    language="english"  → Google TTS en-US voice
+    language="bilingual"→ per-line auto-detect, Google TTS for both
+    language="auto"     → auto-detect from text content
     """
     text = clean_for_tts(text)
     if not text:
         return b""
     if language == "amharic":
-        return _google_tts(text, mulaw=True)
+        return _google_tts(text, mulaw=True, lang="amharic")
     if language == "english":
-        return _elevenlabs_tts(text, mulaw=True)
+        return _google_tts(text, mulaw=True, lang="english")
     return _route_tts(text, mulaw=True)
 
 

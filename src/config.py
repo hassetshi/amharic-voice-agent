@@ -25,11 +25,11 @@ class Config:
     ELEVENLABS_VOICE_ID: str= os.getenv("ELEVENLABS_VOICE_ID", "EXAVITQu4vr4xnSDxMaL")
     ELEVENLABS_MODEL: str   = "eleven_turbo_v2_5"   # multilingual, low latency
 
-    # ── Google Cloud TTS (Amharic) ──────────────────────
-    # Native am-ET voice — much better quality than ElevenLabs for Amharic
-    GOOGLE_TTS_API_KEY: str  = os.getenv("GOOGLE_TTS_API_KEY", "")
-    GOOGLE_TTS_VOICE: str    = "am-ET-Standard-A"   # Amharic female voice
-    GOOGLE_TTS_LANGUAGE: str = "am-ET"
+    # ── Google Cloud TTS ────────────────────────────────
+    GOOGLE_TTS_API_KEY: str       = os.getenv("GOOGLE_TTS_API_KEY", "")
+    GOOGLE_TTS_VOICE_AM: str      = "am-ET-Standard-A"   # Amharic female voice
+    GOOGLE_TTS_VOICE_EN: str      = "en-US-Standard-C"   # English female voice
+    GOOGLE_TTS_LANGUAGE: str      = "am-ET"              # kept for backwards compat
 
     # ── Twilio (Phone) ─────────────────────────────────
     TWILIO_ACCOUNT_SID: str = os.getenv("TWILIO_ACCOUNT_SID", "")
