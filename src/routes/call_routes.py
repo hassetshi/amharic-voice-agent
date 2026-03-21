@@ -34,10 +34,11 @@ MIN_SPEECH_CHUNKS  = 8    # 8 × 20 ms = 160 ms minimum speech to process
 MAX_BUFFER_CHUNKS  = 400  # 400 × 20 ms = 8 s max recording per utterance
 
 # ── Language → Google STT BCP-47 code ────────────────────────────────────────
+# Bilingual sends "am-ET,en-US" — Google auto-detects which language is spoken
 _STT_LANG = {
     "amharic":   "am-ET",
     "english":   "en-US",
-    "bilingual": "am-ET",   # Amharic is primary for bilingual lines
+    "bilingual": "am-ET,en-US",
 }
 
 
