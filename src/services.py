@@ -397,56 +397,104 @@ def extract_name_from_reply(session: CallSession, reply: str):
 
 
 # ════════════════════════════════════════════════════════════════════════════
-# GHL CRM — POST call data to GoHighLevel webhook
+# GHL CRM — Create/update contact via GHL Contacts API (v1)
 # ════════════════════════════════════════════════════════════════════════════
 async def send_to_ghl(session: CallSession):
-    """Send call summary and contact data to GHL inbound webhook."""
+    """Create or update a GHL contact using the Location API key.
+
+    Falls back to inbound webhook if no API key is configured.
+    """
     from .company import get_by_id, default_company
     company = get_by_id(session.company_id) if session.company_id else default_company()
-    webhook_url = (company.ghl_webhook_url if company else "") or config.GHL_WEBHOOK_URL
-    if not webhook_url or "YOUR_HOOK_ID" in webhook_url:
-        print("[GHL] ⚠️  Webhook URL not configured — skipping CRM update")
-        return
 
-    # Phone: keep E.164 format (+1XXXXXXXXXX) — GHL accepts it and deduplicates on it
+    # Phone in E.164 format
     caller_raw = session.caller or ""
-    # Normalize: ensure +1 prefix for 10-digit US numbers without country code
     if caller_raw and not caller_raw.startswith("+"):
         caller_raw = f"+1{caller_raw}"
-    phone = caller_raw   # send full E.164 to GHL
+    phone = caller_raw
 
-    # Name: use what was extracted from speech, fall back to the caller's number
+    # Name
     extracted_name = session.contact.get("name", "").strip()
     first_name = extracted_name if extracted_name else f"Caller {phone[-4:]}" if phone else "Voice Caller"
 
-    # Company tag from session
     company_tag = company.id.replace("_", "-") if company else "amazon-consulting"
+    tags = [t.strip() for t in f"voice-agent,{session.language},{company_tag}".split(",")]
+
+    # ── Path A: GHL Contacts API (reliable — bypasses workflow variable bug) ──
+    if config.GHL_API_KEY:
+        contact_payload = {
+            "firstName": first_name,
+            "phone":     phone,
+            "source":    "Amharic Voice Agent",
+            "tags":      tags,
+        }
+        note_body = (
+            f"Service: {session.contact.get('service', 'General Inquiry')}\n"
+            f"Language: {session.language}\n"
+            f"Summary: {session.summary()}\n\n"
+            f"Transcript:\n{session.full_transcript_text()}"
+        )
+        headers = {
+            "Authorization": f"Bearer {config.GHL_API_KEY}",
+            "Content-Type":  "application/json",
+            "Version":       "2021-07-28",
+        }
+        try:
+            async with httpx.AsyncClient() as client:
+                # Upsert contact
+                r = await client.post(
+                    "https://rest.gohighlevel.com/v1/contacts/",
+                    json=contact_payload,
+                    headers=headers,
+                    timeout=10.0,
+                )
+                print(f"[GHL API] Contact → HTTP {r.status_code}")
+                if r.status_code in (200, 201):
+                    contact_id = r.json().get("contact", {}).get("id", "")
+                    session.ghl_sent = True
+                    print(f"[GHL API] ✅ Contact created/updated: {contact_id} | {first_name} | {phone}")
+                    # Add call note
+                    if contact_id:
+                        await client.post(
+                            f"https://rest.gohighlevel.com/v1/contacts/{contact_id}/notes/",
+                            json={"body": note_body},
+                            headers=headers,
+                            timeout=10.0,
+                        )
+                        print(f"[GHL API] ✅ Note added to contact")
+                    return
+                else:
+                    print(f"[GHL API] ❌ {r.status_code}: {r.text[:200]}")
+        except Exception as e:
+            print(f"[GHL API] ❌ Error: {e}")
+
+    # ── Path B: fallback to inbound webhook ───────────────────────────────────
+    webhook_url = (company.ghl_webhook_url if company else "") or config.GHL_WEBHOOK_URL
+    if not webhook_url or "YOUR_HOOK_ID" in webhook_url:
+        print("[GHL] ⚠️  No API key and no webhook URL — skipping CRM update")
+        return
 
     payload = {
-        "firstName":       first_name,
-        "phone":           phone,
-        "caller":          caller_raw,
-        "source":          "Amharic Voice Agent",
-        "language":        session.language,
-        "service":         session.contact.get("service", "General Inquiry"),
-        "callSid":         session.call_sid,
-        "transcript":      session.full_transcript_text(),
-        "summary":         session.summary(),
+        "firstName":            first_name,
+        "phone":                phone,
+        "source":               "Amharic Voice Agent",
+        "language":             session.language,
+        "service":              session.contact.get("service", "General Inquiry"),
+        "callSid":              session.call_sid,
+        "transcript":           session.full_transcript_text(),
+        "summary":              session.summary(),
         "appointmentRequested": session.contact.get("appointmentRequested", "false"),
-        "appointmentDay":  session.contact.get("preferredDay", ""),
-        "tags":            f"voice-agent,{session.language},{company_tag}",
+        "tags":                 ",".join(tags),
     }
-
     try:
         async with httpx.AsyncClient() as client:
             r = await client.post(
                 webhook_url,
                 json=payload,
                 headers={"Content-Type": "application/json"},
-                timeout=10.0
+                timeout=10.0,
             )
         session.ghl_sent = True
-        print(f"[GHL] ✅ Sent → HTTP {r.status_code} | {session.summary()}")
-        print(f"[GHL] Payload → firstName={first_name!r} | phone={phone!r} | service={payload['service']!r}")
+        print(f"[GHL Webhook] ✅ HTTP {r.status_code} | {first_name} | {phone}")
     except Exception as e:
-        print(f"[GHL] ❌ Error: {e}")
+        print(f"[GHL Webhook] ❌ Error: {e}")

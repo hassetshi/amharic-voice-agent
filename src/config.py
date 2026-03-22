@@ -36,8 +36,9 @@ class Config:
     TWILIO_AUTH_TOKEN: str  = os.getenv("TWILIO_AUTH_TOKEN", "")
     TWILIO_PHONE: str       = os.getenv("TWILIO_PHONE_NUMBER", "")
 
-    # ── GHL CRM Webhook ────────────────────────────────
+    # ── GHL CRM ────────────────────────────────────────
     GHL_WEBHOOK_URL: str    = os.getenv("GHL_WEBHOOK_URL", "")
+    GHL_API_KEY: str        = os.getenv("GHL_API_KEY", "")       # Location API key
 
     # ── Server ─────────────────────────────────────────
     BASE_URL: str           = os.getenv("BASE_URL", "http://localhost:8000")
