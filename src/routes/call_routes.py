@@ -72,6 +72,16 @@ async def incoming_call(request: Request):
 
     session  = session_manager.create(call_sid, caller)
 
+    # Pre-populate phone from Twilio caller ID — agent should NEVER ask for it
+    if caller and caller not in ("UNKNOWN", "anonymous"):
+        import re as _re
+        digits = _re.sub(r'\D', '', caller)
+        if digits.startswith('1') and len(digits) == 11:
+            digits = digits[1:]   # strip US country code
+        if len(digits) == 10:
+            session.set_contact("phone", digits)
+            print(f"[CALL] Phone pre-set from caller ID: {digits}")
+
     # Identify company from the called Twilio number
     company = get_by_number(to) or default_company()
     if company:

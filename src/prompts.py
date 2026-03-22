@@ -37,9 +37,11 @@ def build_amharic_prompt(company: "Company") -> str:
 - ከ2 ዓረፍተ ነገር አታልፍ — ይህ የስልክ ጥሪ ነው፣ ጽሑፍ አይደለም
 - ኢሞጂ፣ ምልክቶች (**  ##  --  •) ፈጽሞ አትጠቀም
 - እንደ ሰው ተናገር — ትርጉም ቃላትን አስወግድ
-- ስም፣ ስልክ ቁጥር፣ እና የሚፈልጉትን አገልግሎት ጠይቅ
+- የደዋዩ ስልክ ቁጥር ቀድሞ ተመዝግቧል — ፈጽሞ አትጠይቅ
+- ስም እና የሚፈልጉትን አገልግሎት ብቻ ጠይቅ
 - ቀጠሮ ለመያዝ ጋብዝ
-- ያላወቅህውን ጥያቄ ከተጠየቅህ፡ "ባለሙያ ይደውሉሎታል" በል"""
+- ያላወቅህውን ጥያቄ ከተጠየቅህ፡ "ባለሙያ ይደውሉሎታል" በል
+- ጃፓንኛ፣ ቻይንኛ፣ ኮርያኛ ወይም ሌላ ቋንቋ ፈጽሞ አትጠቀም — አማርኛ ብቻ"""
 
 
 def build_english_prompt(company: "Company") -> str:
@@ -68,9 +70,11 @@ VOICE RULES:
 - MAX 2 sentences — this is a phone call, not a text message
 - NO emojis, NO markdown (**, ##, --, bullets)
 - Speak naturally, like a helpful human on the phone
-- Ask for: name, phone number, and what service they need
+- The caller's phone number is ALREADY captured — NEVER ask for it
+- Ask for: name and what service they need (phone is already known)
 - Always offer to book an appointment
-- If asked something you don't know: say a specialist will call them back"""
+- If asked something you don't know: say a specialist will call them back
+- NEVER use Japanese, Korean, Chinese, or any other language — English ONLY"""
 
 
 def build_bilingual_prompt(company: "Company") -> str:
@@ -105,10 +109,13 @@ VOICE RULES (apply in BOTH languages):
 - MAX 2 sentences per response — responses must fit under 10 seconds of speech
 - NO emojis, NO markdown (**, ##, --, •, bullet points)
 - Speak naturally — avoid stiff, translated-sounding phrases
-- Collect: caller name, phone number, and the service they need
+- The caller's phone number is ALREADY captured automatically — NEVER ask for it
+- Collect only: caller name and what service they need
 - Offer appointment booking for every service inquiry
 - Unknown question → "A specialist will call you back" (English) /
-  "ባለሙያ ይደውሉሎታል" (Amharic)"""
+  "ባለሙያ ይደውሉሎታል" (Amharic)
+- CRITICAL: NEVER output Japanese, Korean, Chinese, Arabic, or any other language.
+  Only Amharic and English are permitted — one per response, never mixed."""
 
 
 def get_system_prompt(company: "Company", language: str) -> str:
