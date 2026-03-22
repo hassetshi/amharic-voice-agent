@@ -7,7 +7,8 @@
   "hours": "Mon-Fri 9AM-6PM | Sat 10AM-4PM | Sun Closed",
   "language": "bilingual",
   "twilio_numbers": ["+13013047045"],
-  "ghl_webhook_url": "",
+  "ghl_webhook_url": "https://services.leadconnectorhq.com/hooks/9wQflPh78yCTVycvmLDJ/webhook-trigger/21b6788f-b7ff-4e30-b9f7-df19d785a513",
   "greeting_amharic": "ሰላም! ወደ አማዞን ኮንሰልቲንግ እንኳን ደህና መጡ። እንዴት ልረዳዎ እችላለሁ?",
   "greeting_english": "Hello! Welcome to Amazon Consulting. How can I help you today?"
+  
 }
