@@ -420,13 +420,14 @@ async def send_to_ghl(session: CallSession):
     company_tag = company.id.replace("_", "-") if company else "amazon-consulting"
     tags = [t.strip() for t in f"voice-agent,{session.language},{company_tag}".split(",")]
 
-    # ── Path A: GHL Contacts API (reliable — bypasses workflow variable bug) ──
-    if config.GHL_API_KEY:
+    # ── Path A: GHL Contacts API v2 (Private Integration) ────────────────────
+    if config.GHL_API_KEY and config.GHL_LOCATION_ID:
         contact_payload = {
-            "firstName": first_name,
-            "phone":     phone,
-            "source":    "Amharic Voice Agent",
-            "tags":      tags,
+            "firstName":  first_name,
+            "phone":      phone,
+            "source":     "Amharic Voice Agent",
+            "tags":       tags,
+            "locationId": config.GHL_LOCATION_ID,
         }
         note_body = (
             f"Service: {session.contact.get('service', 'General Inquiry')}\n"
@@ -441,30 +442,30 @@ async def send_to_ghl(session: CallSession):
         }
         try:
             async with httpx.AsyncClient() as client:
-                # Upsert contact
+                # Upsert contact (v2 endpoint)
                 r = await client.post(
-                    "https://rest.gohighlevel.com/v1/contacts/",
+                    "https://services.leadconnectorhq.com/contacts/",
                     json=contact_payload,
                     headers=headers,
                     timeout=10.0,
                 )
-                print(f"[GHL API] Contact → HTTP {r.status_code}")
+                print(f"[GHL API] Contact → HTTP {r.status_code} | {r.text[:200]}")
                 if r.status_code in (200, 201):
                     contact_id = r.json().get("contact", {}).get("id", "")
                     session.ghl_sent = True
-                    print(f"[GHL API] ✅ Contact created/updated: {contact_id} | {first_name} | {phone}")
+                    print(f"[GHL API] ✅ Created/updated: {contact_id} | {first_name} | {phone}")
                     # Add call note
                     if contact_id:
                         await client.post(
-                            f"https://rest.gohighlevel.com/v1/contacts/{contact_id}/notes/",
-                            json={"body": note_body},
+                            f"https://services.leadconnectorhq.com/contacts/{contact_id}/notes/",
+                            json={"body": note_body, "userId": ""},
                             headers=headers,
                             timeout=10.0,
                         )
-                        print(f"[GHL API] ✅ Note added to contact")
+                        print("[GHL API] ✅ Note added")
                     return
                 else:
-                    print(f"[GHL API] ❌ {r.status_code}: {r.text[:200]}")
+                    print(f"[GHL API] ❌ {r.status_code}: {r.text[:300]}")
         except Exception as e:
             print(f"[GHL API] ❌ Error: {e}")
 

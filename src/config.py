@@ -38,7 +38,8 @@ class Config:
 
     # ── GHL CRM ────────────────────────────────────────
     GHL_WEBHOOK_URL: str    = os.getenv("GHL_WEBHOOK_URL", "")
-    GHL_API_KEY: str        = os.getenv("GHL_API_KEY", "")       # Location API key
+    GHL_API_KEY: str        = os.getenv("GHL_API_KEY", "")         # Private Integration token
+    GHL_LOCATION_ID: str    = os.getenv("GHL_LOCATION_ID", "")     # Location ID from GHL URL
 
     # ── Server ─────────────────────────────────────────
     BASE_URL: str           = os.getenv("BASE_URL", "http://localhost:8000")
