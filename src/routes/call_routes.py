@@ -10,7 +10,7 @@ import asyncio
 import base64
 from fastapi import APIRouter, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import Response
-from twilio.twiml.voice_response import VoiceResponse, Connect, Stream  # noqa: F401
+from twilio.twiml.voice_response import VoiceResponse, Connect, Stream, Gather  # noqa: F401
 
 from ..config import config
 from ..session import session_manager
@@ -76,9 +76,61 @@ async def incoming_call(request: Request):
     if company:
         session.company_id = company.id
         session.language   = company.language
-        print(f"\n[CALL] 📞 Incoming: {caller} → {call_sid} | Company: {company.name}")
+        print(f"\n[CALL] Incoming: {caller} → {call_sid} | Company: {company.name}")
     else:
-        print(f"\n[CALL] 📞 Incoming: {caller} → {call_sid} | No company found")
+        print(f"\n[CALL] Incoming: {caller} → {call_sid} | No company found")
+
+    twiml = VoiceResponse()
+
+    # Bilingual → show language selection menu (DTMF press 1 / press 2)
+    if session.language == "bilingual":
+        gather = Gather(
+            num_digits=1,
+            action=f"{config.BASE_URL}/language-select/{call_sid}",
+            method="POST",
+            timeout=8,
+        )
+        gather.say(
+            "Welcome to Amazon Consulting. "
+            "For English, press 1. "
+            "For Amharic, press 2.",
+            voice="alice",
+            language="en-US",
+        )
+        twiml.append(gather)
+        # Timeout fallback — default to English if no key pressed
+        twiml.redirect(
+            f"{config.BASE_URL}/language-select/{call_sid}",
+            method="POST",
+        )
+    else:
+        # Non-bilingual — connect directly to WebSocket
+        ws_host    = config.BASE_URL.replace("https://", "").replace("http://", "")
+        stream_url = f"wss://{ws_host}/media-stream/{call_sid}"
+        connect    = Connect()
+        connect.append(Stream(url=stream_url))
+        twiml.append(connect)
+        print(f"[CALL] Stream URL: {stream_url}")
+
+    return Response(content=str(twiml), media_type="application/xml")
+
+
+# ════════════════════════════════════════════════════════════════════════════
+# POST /language-select/{call_sid}  — receives DTMF digit, sets language
+# ════════════════════════════════════════════════════════════════════════════
+@router.post("/language-select/{call_sid}")
+async def language_select(request: Request, call_sid: str):
+    form  = await request.form()
+    digit = form.get("Digits", "")   # empty = timeout redirect (default English)
+
+    session = session_manager.get(call_sid)
+    if session:
+        if digit == "2":
+            session.language = "amharic"
+            print(f"[IVR] {call_sid} → Amharic selected")
+        else:
+            session.language = "english"
+            print(f"[IVR] {call_sid} → English selected (digit={digit!r})")
 
     ws_host    = config.BASE_URL.replace("https://", "").replace("http://", "")
     stream_url = f"wss://{ws_host}/media-stream/{call_sid}"
@@ -88,7 +140,7 @@ async def incoming_call(request: Request):
     connect.append(Stream(url=stream_url))
     twiml.append(connect)
 
-    print(f"[CALL] Stream URL: {stream_url}")
+    print(f"[IVR] Connecting stream: {stream_url}")
     return Response(content=str(twiml), media_type="application/xml")
 
 
