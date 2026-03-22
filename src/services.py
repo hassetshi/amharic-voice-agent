@@ -358,21 +358,33 @@ async def send_to_ghl(session: CallSession):
         print("[GHL] ⚠️  Webhook URL not configured — skipping CRM update")
         return
 
-    # Always use the Twilio caller ID as phone — guaranteed to be valid
-    phone = session.caller.replace("+1", "").replace("+", "") if session.caller else ""
+    # Phone: keep E.164 format (+1XXXXXXXXXX) — GHL accepts it and deduplicates on it
+    caller_raw = session.caller or ""
+    # Normalize: ensure +1 prefix for 10-digit US numbers without country code
+    if caller_raw and not caller_raw.startswith("+"):
+        caller_raw = f"+1{caller_raw}"
+    phone = caller_raw   # send full E.164 to GHL
+
+    # Name: use what was extracted from speech, fall back to the caller's number
+    extracted_name = session.contact.get("name", "").strip()
+    first_name = extracted_name if extracted_name else f"Caller {phone[-4:]}" if phone else "Voice Caller"
+
+    # Company tag from session
+    company_tag = company.id.replace("_", "-") if company else "amazon-consulting"
 
     payload = {
-        "firstName":       session.contact.get("name", "Amharic Caller"),
+        "firstName":       first_name,
         "phone":           phone,
-        "caller":          session.caller,
+        "caller":          caller_raw,
         "source":          "Amharic Voice Agent",
         "language":        session.language,
         "service":         session.contact.get("service", "General Inquiry"),
         "callSid":         session.call_sid,
         "transcript":      session.full_transcript_text(),
         "summary":         session.summary(),
+        "appointmentRequested": session.contact.get("appointmentRequested", "false"),
         "appointmentDay":  session.contact.get("preferredDay", ""),
-        "tags":            "voice-agent,amharic,amazon-consulting",
+        "tags":            f"voice-agent,{session.language},{company_tag}",
     }
 
     try:
