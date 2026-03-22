@@ -447,5 +447,6 @@ async def send_to_ghl(session: CallSession):
             )
         session.ghl_sent = True
         print(f"[GHL] ✅ Sent → HTTP {r.status_code} | {session.summary()}")
+        print(f"[GHL] Payload → firstName={first_name!r} | phone={phone!r} | service={payload['service']!r}")
     except Exception as e:
         print(f"[GHL] ❌ Error: {e}")
