@@ -20,6 +20,7 @@ from ..services import (
     text_to_speech,
     audio_to_base64,
     extract_contact_info,
+    extract_name_from_reply,
     send_to_ghl,
     google_stt,
 )
@@ -196,6 +197,7 @@ async def media_stream(websocket: WebSocket, call_sid: str):
             # ── STEP 2: RAG + STEP 3: LLM (inside generate_response) ───────
             ai_reply = await generate_response(session, sentence)
             session.add_agent_message(ai_reply)
+            extract_name_from_reply(session, ai_reply)   # capture name if LLM used it
             print(f"[3/4 LLM] Agent: {ai_reply}")
 
             # ── STEP 4: Google TTS → send audio ────────────────────────────

@@ -325,13 +325,24 @@ SERVICE_KEYWORDS = {
 
 
 def extract_contact_info(session: CallSession, text: str):
-    """Extract phone numbers and service intent from caller speech."""
+    """Extract phone numbers, name, and service intent from caller speech."""
     text_lower = text.lower()
 
-    # Phone number
-    phone_match = re.search(r'\b(\d{3}[-.\s]?\d{3}[-.\s]?\d{4})\b', text)
+    # Phone number — strip STT noise (slashes, letters) then match 10 digits
+    digits_only = re.sub(r'[^\d\s\-.]', '', text)   # remove /, letters, etc.
+    phone_match = re.search(r'\b(\d{3}[-.\s]?\d{3}[-.\s]?\d{4})\b', digits_only)
     if phone_match:
         session.set_contact("phone", phone_match.group(1))
+
+    # Name extraction from caller speech
+    # English: "my name is John"
+    name_en = re.search(r'\bmy name is ([A-Z][a-z]+)', text, re.IGNORECASE)
+    if name_en:
+        session.set_contact("name", name_en.group(1).title())
+    # Amharic: "ስሜ X ነው"
+    name_am = re.search(r'ስሜ\s+(\S+)\s+ነው', text)
+    if name_am:
+        session.set_contact("name", name_am.group(1))
 
     # Service keyword matching
     for keyword, service in SERVICE_KEYWORDS.items():
@@ -344,6 +355,45 @@ def extract_contact_info(session: CallSession, text: str):
     appt_am = ["ቀጠሮ", "ልያዝ", "ስምምነት"]
     if any(k in text_lower for k in appt_en) or any(k in text for k in appt_am):
         session.set_contact("appointmentRequested", "true")
+
+
+# Common Amharic words that are NOT names (avoid false positives)
+_AMHARIC_NON_NAMES = {
+    "ወደ", "አማዞን", "እንዴት", "ምን", "ሲ", "ኩ", "ደህና", "ጥሩ", "አዎ", "አይ",
+    "ልረዳዎ", "ሰላም", "መጡ", "ነው", "ናቸው", "ይሁን", "ሌላ", "ምስጋና", "ደወልክ",
+}
+
+def extract_name_from_reply(session: CallSession, reply: str):
+    """Extract caller name if the AI addressed them by name in its reply.
+
+    The LLM often says 'ሰላም ሽመልስ!' or 'Hello Shimelis,' — we capture that.
+    Called after each AI response so we pick up the name as early as possible.
+    """
+    if session.contact.get("name"):
+        return  # already captured
+
+    # English: "Hello John!" / "Hi Sarah," / "Dear Michael,"
+    m = re.search(r'\b(?:Hello|Hi|Dear)\s+([A-Z][a-z]{2,})[!,\.]', reply)
+    if m:
+        session.set_contact("name", m.group(1))
+        return
+
+    # Amharic: "ሰላም ሽመልስ!" or "ጥሩ! ሽመልስ፣"
+    m = re.search(r'(?:ሰላም|ጥሩ)[!፣\s]+([^\s!፣።]+)[!፣።]', reply)
+    if m:
+        candidate = m.group(1).strip()
+        if candidate and candidate not in _AMHARIC_NON_NAMES and len(candidate) >= 2:
+            session.set_contact("name", candidate)
+            return
+
+    # Latin name anywhere in an Amharic reply (e.g. "Shimelis" written in English)
+    m = re.search(r'\b([A-Z][a-z]{2,})\b', reply)
+    if m:
+        candidate = m.group(1)
+        common_words = {"Amazon", "Consulting", "Monday", "Tuesday", "Wednesday",
+                        "Thursday", "Friday", "Saturday", "Sunday", "Hello", "Dear"}
+        if candidate not in common_words:
+            session.set_contact("name", candidate)
 
 
 # ════════════════════════════════════════════════════════════════════════════
