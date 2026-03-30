@@ -117,6 +117,7 @@ def _google_tts(text: str, mulaw: bool = True, lang: str = "amharic") -> bytes:
             "audioConfig": {
                 "audioEncoding": "MULAW" if mulaw else "MP3",
                 "sampleRateHertz": 8000,
+                "volumeGainDb": 4.0,   # +4 dB boost (range: -96 to +16)
             },
         }
         with httpx.Client() as client:
