@@ -188,77 +188,75 @@ def _route_tts(text: str, mulaw: bool) -> bytes:
 
 
 def format_for_speech(text: str) -> str:
-    """Format LLM output for natural-sounding TTS delivery.
+    """Format LLM output for natural-sounding Amharic/English TTS.
 
-    Pipeline:
-      LLM output → normalize → add pauses → short sentences → TTS
-
-    Rules:
-    - Split run-on sentences into max ~10 words each
-    - Add ellipsis pause after conjunctions / transition words
-    - Ensure Ethiopic sentence endings use ። not just whitespace
-    - Never break mid-word
+    Pipeline: LLM output → flatten newlines → add pauses → split long sentences → TTS
     """
     if not text:
         return text
 
-    # ── 1. Normalize Ethiopic punctuation ────────────────────────────────
-    # Replace bare newlines between Amharic text with ። pause
-    text = re.sub(r'([፣።!\?])\s*\n\s*', r'\1 ', text)
-    text = re.sub(r'\n', ' ', text)
+    # ── 1. Flatten newlines ───────────────────────────────────────────────
+    text = re.sub(r'\n+', ' ', text)
 
-    # ── 2. Add ellipsis pause after common Amharic transition words ───────
-    amharic_transitions = [
-        'ጥሩ', 'እሺ', 'እሺ፣', 'ሰላም', 'አዎ', 'እናም', 'ስለዚህ', 'ደህና', 'እንግዲህ',
-    ]
-    for word in amharic_transitions:
-        # Add "..." after the word if not already followed by pause punctuation
-        text = re.sub(rf'({re.escape(word)})\s+(?![፣።\.])', rf'\1... ', text)
+    # ── 2. Add natural pause after Amharic transition words ───────────────
+    for word in ('ጥሩ', 'እሺ', 'ሰላም', 'አዎ', 'እናም', 'ስለዚህ', 'እንግዲህ', 'ደህና'):
+        text = re.sub(rf'({re.escape(word)})\s+(?![፣།።])', rf'\1፣ ', text)
 
-    # English transitions
-    english_transitions = ['okay', 'sure', 'great', 'alright', 'yes', 'well', 'so']
-    for word in english_transitions:
-        text = re.sub(rf'\b({word})[,]?\s+', rf'\1, ', text, flags=re.IGNORECASE)
+    # ── 3. Add natural pause after English transition words ───────────────
+    for word in ('okay', 'sure', 'great', 'alright', 'yes', 'well', 'so'):
+        text = re.sub(rf'\b({word}),?\s+', rf'\1, ', text, flags=re.IGNORECASE)
 
-    # ── 3. Break very long sentences (>12 words) at natural pause points ──
+    # ── 4. Break very long sentences (>12 words) at Ethiopic comma ────────
     def _split_long(sentence: str) -> str:
         words = sentence.split()
         if len(words) <= 12:
             return sentence
-        # Try to split at ፣ (Ethiopic comma) first
         if '፣' in sentence:
             parts = sentence.split('፣', 1)
             return parts[0].strip() + '፣ ' + parts[1].strip()
-        # Fall back: split at midpoint on a space
         mid = len(words) // 2
         return ' '.join(words[:mid]) + '፣ ' + ' '.join(words[mid:])
 
-    # Split on sentence-ending punctuation, process each, rejoin
-    segments = re.split(r'(?<=[።!\?])\s+', text)
+    # Only split on Ethiopic full stop ። — never on ! or ?
+    segments = re.split(r'(?<=።)\s+', text)
     segments = [_split_long(s.strip()) for s in segments if s.strip()]
     text = ' '.join(segments)
 
-    # ── 4. Collapse extra spaces ─────────────────────────────────────────
+    # ── 5. Collapse extra spaces ──────────────────────────────────────────
     text = re.sub(r' {2,}', ' ', text).strip()
     return text
 
 
 def clean_for_tts(text: str) -> str:
     """Remove emojis, markdown, and symbols that sound bad when spoken aloud."""
-    # Strip markdown bold/italic/headers
+    # Strip markdown bold/italic/headers/bullets
     text = re.sub(r"\*{1,3}(.*?)\*{1,3}", r"\1", text)
     text = re.sub(r"#{1,6}\s*", "", text)
     text = re.sub(r"`{1,3}.*?`{1,3}", "", text, flags=re.DOTALL)
-    # Strip emojis and other symbols
+    text = re.sub(r"^\s*[-–—•·]\s+", "", text, flags=re.MULTILINE)  # bullet points
+
+    # Replace Latin punctuation that Google TTS reads aloud in Amharic
+    # ! and ? → Ethiopic full stop ። (natural pause)
+    text = re.sub(r"[!？]", "።", text)
+    text = re.sub(r"\?", "።", text)
+    # Remove parentheses, brackets, other symbols TTS reads literally
+    text = re.sub(r"[(){}\[\]<>/\\|_~^]", " ", text)
+    # Remove standalone dashes used as separators
+    text = re.sub(r"\s[-–—]+\s", " ", text)
+
+    # Strip emojis (anything outside Basic Multilingual Plane or symbol categories)
     cleaned = []
     for char in text:
         cat = unicodedata.category(char)
-        # Keep: letters (L), numbers (N), punctuation (P), spaces (Z), Ethiopic
-        if cat.startswith(("L", "N", "P", "Z")) or char in "\n ":
+        cp  = ord(char)
+        # Keep Ethiopic letters (U+1200–U+137F), Latin letters, numbers,
+        # Ethiopic punctuation (። ፣ ፡), comma, period, space, newline
+        if cat.startswith(("L", "N", "Z")) or char in "\n ,. ።፣፡":
             cleaned.append(char)
     text = "".join(cleaned)
-    # Collapse extra whitespace/newlines
-    text = re.sub(r"\n{2,}", "\n", text)
+
+    # Collapse whitespace
+    text = re.sub(r"\n{2,}", " ", text)
     text = re.sub(r" {2,}", " ", text)
     return text.strip()
 
