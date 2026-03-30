@@ -23,6 +23,7 @@ from ..services import (
     extract_name_from_reply,
     send_to_ghl,
     google_stt,
+    STT_CONFIDENCE_THRESHOLD,
 )
 
 router = APIRouter()
@@ -197,10 +198,21 @@ async def media_stream(websocket: WebSocket, call_sid: str):
         try:
             # ── STEP 1: Google STT ──────────────────────────────────────────
             print(f"[1/4 STT] Sending {len(audio)} bytes → Google STT ({stt_lang})")
-            sentence = await google_stt(audio, language=stt_lang)
+            sentence, confidence = await google_stt(audio, language=stt_lang)
             if not sentence:
                 print("[1/4 STT] No transcript — skipping")
                 return
+
+            # ── Low-confidence: ask caller to repeat ────────────────────────
+            if confidence < STT_CONFIDENCE_THRESHOLD:
+                print(f"[1/4 STT] Low confidence ({confidence:.2f}) — asking to repeat")
+                if session.language == "english":
+                    repeat_msg = "Sorry, I didn't catch that. Could you please repeat?"
+                else:
+                    repeat_msg = "ይቅርታ፣ ትንሽ በዝግጅት እንደገና ይናገሩ።"
+                await send_audio(text_to_speech(repeat_msg, session.language))
+                return
+
             print(f"[1/4 STT] Caller: {sentence}")
             session.add_user_message(sentence)
             extract_contact_info(session, sentence)
@@ -208,7 +220,7 @@ async def media_stream(websocket: WebSocket, call_sid: str):
             # ── STEP 2: RAG + STEP 3: LLM (inside generate_response) ───────
             ai_reply = await generate_response(session, sentence)
             session.add_agent_message(ai_reply)
-            extract_name_from_reply(session, ai_reply)   # capture name if LLM used it
+            extract_name_from_reply(session, ai_reply)
             print(f"[3/4 LLM] Agent: {ai_reply}")
 
             # ── STEP 4: Google TTS → send audio ────────────────────────────

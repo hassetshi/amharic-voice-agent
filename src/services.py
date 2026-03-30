@@ -294,29 +294,54 @@ def audio_to_base64(audio_bytes: bytes) -> str:
 # ════════════════════════════════════════════════════════════════════════════
 # STT — Google Cloud Speech-to-Text (supports Amharic am-ET)
 # ════════════════════════════════════════════════════════════════════════════
-async def google_stt(audio_bytes: bytes, language: str = "am-ET") -> str:
+
+# Confidence threshold — below this we ask the caller to repeat
+STT_CONFIDENCE_THRESHOLD = 0.65
+
+# Amharic phrase hints — boost recognition of common school & service words
+_AMHARIC_PHRASE_HINTS = [
+    # School / MCPS
+    "ልጄ", "ልጄ ዛሬ", "ትምህርት ቤት", "አልሄደም", "ቀርቷል", "ቀርታለች",
+    "ክፍያ", "ቀጠሮ", "ምዝገባ", "አውቶቡስ", "ሆምወርክ", "ቤት ስራ",
+    "ደረጃ", "ትምህርት", "አስተማሪ", "ፈተና", "ፓረንት ቪው",
+    # Amazon Consulting
+    "ታክስ", "ቪዛ", "ፓስፖርት", "ግሪን ካርድ", "ቀጠሮ", "ካርጎ",
+    "ኢሚግሬሽን", "ኤምባሲ", "ቲኬት", "አውሮፕላን", "LLC", "ኖታሪ",
+    # Common responses
+    "አዎ", "አይ", "አልፈልግም", "አጠያያቂ ነው", "እርዳታ",
+    "ሰላም", "ምስጋና", "አሁን", "ነገ", "ዛሬ",
+    # Numbers in Amharic
+    "አንድ", "ሁለት", "ሶስት", "አራት", "አምስት",
+]
+
+async def google_stt(audio_bytes: bytes, language: str = "am-ET") -> tuple[str, float]:
     """Transcribe mulaw 8kHz audio using Google Cloud Speech-to-Text.
 
-    For bilingual lines, language="am-ET,en-US" triggers automatic
-    language detection — Google picks whichever language best matches.
+    Returns (transcript, confidence) tuple.
+    confidence < STT_CONFIDENCE_THRESHOLD means we should ask caller to repeat.
+    For bilingual, language="am-ET,en-US" triggers automatic language detection.
     """
     if not audio_bytes or not config.GOOGLE_TTS_API_KEY:
-        return ""
+        return "", 1.0
     try:
-        # Bilingual: split into primary + alternative languages
         langs = [l.strip() for l in language.split(",")]
         stt_config = {
-            "encoding": "MULAW",
-            "sampleRateHertz": 8000,
-            "languageCode": langs[0],
+            "encoding":                  "MULAW",
+            "sampleRateHertz":           8000,
+            "languageCode":              langs[0],
             "enableAutomaticPunctuation": True,
+            "enableWordConfidence":       True,
+            # Boost Amharic school/service vocabulary
+            "speechContexts": [
+                {"phrases": _AMHARIC_PHRASE_HINTS, "boost": 15.0}
+            ],
         }
         if len(langs) > 1:
             stt_config["alternativeLanguageCodes"] = langs[1:]
 
         payload = {
             "config": stt_config,
-            "audio": {"content": base64.b64encode(audio_bytes).decode("utf-8")},
+            "audio":  {"content": base64.b64encode(audio_bytes).decode("utf-8")},
         }
         async with httpx.AsyncClient() as client:
             r = await client.post(
@@ -325,18 +350,19 @@ async def google_stt(audio_bytes: bytes, language: str = "am-ET") -> str:
                 params={"key": config.GOOGLE_TTS_API_KEY},
                 timeout=15.0,
             )
-            print(f"[GOOGLE STT] HTTP {r.status_code} | {r.text[:200]}")
             r.raise_for_status()
             results = r.json().get("results", [])
             if results:
-                transcript = results[0]["alternatives"][0]["transcript"].strip()
-                detected   = results[0].get("languageCode", langs[0])
-                print(f"[1/4 STT] Detected language: {detected}")
-                return transcript
+                best        = results[0]["alternatives"][0]
+                transcript  = best["transcript"].strip()
+                confidence  = best.get("confidence", 1.0)
+                detected    = results[0].get("languageCode", langs[0])
+                print(f"[1/4 STT] Detected: {detected} | Confidence: {confidence:.2f} | Text: {transcript}")
+                return transcript, confidence
             print("[GOOGLE STT] Empty results — no speech detected")
     except Exception as e:
         print(f"[GOOGLE STT ERROR] {e}")
-    return ""
+    return "", 1.0
 
 
 # ════════════════════════════════════════════════════════════════════════════
