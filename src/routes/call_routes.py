@@ -101,8 +101,9 @@ async def incoming_call(request: Request):
             method="POST",
             timeout=8,
         )
+        company_name = company.name if company else "our office"
         gather.say(
-            "Welcome to Amazon Consulting. "
+            f"Welcome to {company_name}. "
             "For English, press 1. "
             "For Amharic, press 2.",
             voice="alice",
