@@ -1,157 +1,331 @@
-== ABOUT MONTGOMERY COUNTY PUBLIC SCHOOLS (ስለ ሞንትጎመሪ ካውንቲ ትምህርት ቤቶች) ==
+== ABOUT MONTGOMERY COUNTY PUBLIC SCHOOLS (ስለ ሞንትጎመሪ ካውንቲ ት/ቤቶች) ==
 
-Montgomery County Public Schools (MCPS) serves over 160,000 students across 200+
-schools in Montgomery County, Maryland. This voice assistant helps Amharic-speaking
-parents access school information, report absences, and get support — 24 hours a day.
+Montgomery County Public Schools (MCPS) serves over 160,000 students across 200+ schools
+in Montgomery County, Maryland. This voice assistant helps Amharic-speaking parents
+access school information, report absences, check grades, and get support 24 hours a day.
 
-NOTE FOR AI: This is a school assistant, NOT a business. Do NOT offer to book appointments.
-Instead, guide callers to the right department, help them report absences, or provide
-the information they need. If something requires a human, say "A school staff member
-will follow up with you." / "የትምህርት ቤቱ ሰራተኛ ያናግሩዎታል።"
+NOTE FOR AI: This is a school assistant. Do NOT offer to book appointments.
+Guide callers to the right department or phone number. If something requires a human,
+say "ባለሙያ ይደውሉሎታል" or "Please call the school directly."
 
 
-== 1. ATTENDANCE / ክፍያ ቀርቶ (REPORTING ABSENCES) ==
+== 1. PARENTVUE PORTAL (ፓረንት ቪው) ==
 
-To report a child absent:
-- Call your child's specific school directly and press the attendance line
-- Or report online through the ParentVUE parent portal
-- You MUST report by 9:00 AM on the day of absence
+ParentVUE is the main parent portal — available in Amharic, English, Spanish, and more.
+
+What you can do in ParentVUE:
+- View your child's grades and report cards
+- See attendance records
+- Check homework assignments
+- Receive school announcements
+- Update your contact information
+- View your child's bus route and stop
+- Communicate with teachers
+
+How to access:
+- Website: md-mcps-psv.edupoint.com
+- Mobile app: search "ParentVUE" on iPhone or Android
+
+How to create an account:
+- Visit myMCPS.net and click "Create Account"
+- You need your child's Student ID (get it from your school office)
+- Or call your school's main office for an activation code
+
+Amharic: ParentVUE ለመከፈት myMCPS.net ይጎብኙ።
+ልጅዎ የተማሪ ቁጥር ወይም ት/ቤቱ ቢሮ ያስፈልጋል።
+ስልክ ቁጥር 240-740-3000 ደውለው እርዳታ ይጠይቁ።
+
+Tech support for ParentVUE:
+- Email: communitytechsupport@mcpsmd.org
+- Phone: 240-740-3000
+
+
+== 2. ATTENDANCE / ቀጠሮ ቀርቶ (REPORTING ABSENCES) ==
+
+To report your child absent:
+- Call your child's school directly by 9:00 AM on the day of absence
+- Or report online through ParentVUE at myMCPS.net
 - Provide: child's full name, grade, teacher's name, reason for absence
 
-Amharic: ልጅዎ ት/ቤት መቅረቱን ሪፖርት ለማድረግ፣ ከጠዋቱ 9 ሰዓት በፊት ልጅዎ ወደሚማርበት ት/ቤት ይደውሉ።
-Or use ParentVUE online portal at myMCPS.net
+Excused absences include:
+- Illness or injury
+- Family emergency
+- Religious observance
+- Medical or dental appointment
 
-Unexcused vs Excused:
-- Excused: illness, family emergency, religious observance, medical appointment
-- Unexcused: missing school without notification
-- 3+ unexcused absences → school will contact family
+Unexcused absences:
+- Missing school without calling or reporting
+- 3 or more unexcused absences — school will contact the family
 
-
-== 2. SCHOOL ANNOUNCEMENTS (የት/ቤት ማስታወቂያዎች) ==
-
-How to receive announcements:
-- Sign up for school alerts at myMCPS.net (ParentVUE account)
-- MCPS Mobile App — available on iOS and Android
-- School website: montgomeryschoolsmd.org
-- Text alerts: text your school code to receive SMS updates
-
-Emergency closings and delays:
-- Snow days / early dismissals announced on: montgomeryschoolsmd.org
-- Local TV channels: WUSA9, NBC4, ABC7
-- Sign up for MCPS emergency text alerts through ParentVUE
-
-Amharic: የት/ቤት ዝጋት ወይም ዘግይቶ መጀመሪያ ለማወቅ ParentVUE ይመዝገቡ ወይም
-montgomeryschoolsmd.org ይጎብኙ።
+Amharic: ልጅዎ ት/ቤት ካልሄደ፣ ከጠዋቱ 9 ሰዓት በፊት ወደ ት/ቤቱ ደውሉ።
+ወይም myMCPS.net ላይ ParentVUE ተጠቀሙ።
+ሳይደውሉ ቢቀሩ ቀጠሮው ያልተፈቀደ ይሆናል።
 
 
-== 3. HOMEWORK & ACADEMIC SUPPORT (የቤት ስራ እና የትምህርት ድጋፍ) ==
+== 3. SCHOOL REGISTRATION & ENROLLMENT (ምዝገባ) ==
 
-ParentVUE / StudentVUE Portal (myMCPS.net):
-- View your child's grades, assignments, attendance
-- See teacher comments and progress reports
-- Check report card online
+New student registration steps:
+1. Confirm your address using the School Assignment Tool at montgomeryschoolsmd.org
+2. Gather required documents (see below)
+3. Register online through ParentVUE (portal opens April 17 each year)
+   OR bring paper forms directly to your assigned school
+4. Contact your assigned school to schedule an appointment
 
-Homework Help:
-- MCPS Homework Helpline: available online and through the MCPS App
-- Free tutoring available at many schools — ask your school's main office
-- Montgomery County Public Library offers free homework help
+Required documents for registration:
+- Proof of child's age: birth certificate or passport
+- Proof of residency: lease, utility bill, or mortgage statement
+- Parent or guardian photo ID
+- Immunization records (vaccination certificate)
+- Physical examination records
+- IEP (if child has special education needs)
+- Recent report cards (for students transferring from another school)
 
-Contact your child's teacher:
-- Email through ParentVUE messaging
-- Call school main office to leave a message for the teacher
-- Schedule a parent-teacher conference through the school office
+Age requirements:
+- Kindergarten: child must be 5 years old by September 1
+- Grade 1 and above: child must be 6 years old by September 1
+- Students age 7+ who have not attended US schools: call International Admissions at 240-740-4500
 
-Amharic: ልጅዎ ደረጃና ቤት ስራ ለማየት myMCPS.net ላይ ParentVUE ይጠቀሙ።
-ነጻ ትምህርት ድጋፍ ለማግኘት ወደ ት/ቤቱ ቢሮ ያናግሩ።
+School Assignment Tool: montgomeryschoolsmd.org/info/enroll
+Boundary information line: 240-740-7725
+
+Amharic: ልጅዎን ለመምዝገብ የሚያስፈልጉ ሰነዶች:
+የልደት ሰርተፊኬት፣ ክትባት ሪፖርት፣ የቤት ሠነድ፣ እና ወላጅ መታወቂያ።
+montgomeryschoolsmd.org/info/enroll ይጎብኙ።
+ድንበር ማረጋገጫ: 240-740-7725
 
 
 == 4. TRANSPORTATION / ትራንስፖርት ==
 
-School Bus Service:
-- Bus assignments are based on your address — check your child's route at myMCPS.net
-- Bus stop and pickup time listed in ParentVUE under Transportation
-- Bus delays or cancellations: check montgomeryschoolsmd.org or MCPS App
+Finding your child's bus:
+- Log into ParentVUE at myMCPS.net and go to Transportation section
+- Bus stop, route number, and pickup time are listed there
 
-If your child misses the bus:
-- Parent/guardian must provide transportation that day
-- Call the school to notify them your child will be late
+If the bus is late or cancelled:
+- Check montgomeryschoolsmd.org or the MCPS App
+- Parents must provide transportation on the day of cancellation
 
-Amharic: ልጅዎ የሚወሰደው አውቶቡስ ቁጥር እና ሰዓት myMCPS.net ላይ ParentVUE ሲጠቀሙ ማየት ይቻላል።
+Bus depot phone numbers (by route number):
+- Routes 1XXX: Bethesda Depot — 240-740-6580
+- Routes 2XXX: Clarksburg Depot — 240-740-4720
+- Routes 3XXX: Randolph Depot — 240-740-2610
+- Routes 4XXX: Shady Grove North — 240-740-6220
+- Routes 5XXX: Shady Grove South — 240-740-6210
+- Routes 6XXX: West Farm Lower — 240-740-1851
+- Routes 7XXX: West Farm Upper — 240-740-7361
+- General transportation: 301-840-3456
 
-
-== 5. REGISTRATION & ENROLLMENT (ምዝገባ) ==
-
-New Student Registration:
-- Visit: montgomeryschoolsmd.org/registration
-- Required documents: proof of age (birth certificate), immunization records,
-  proof of residency (lease, utility bill), parent/guardian ID
-- Register online or visit your local school
-
-Kindergarten Enrollment:
-- Child must be 5 years old by September 1st of the school year
-- Online registration opens each spring
-
-Transfer between MCPS Schools:
-- Contact the school you are transferring FROM
-- Or call MCPS main office: 240-740-3000
-
-Amharic: ልጅዎን ለመመዝገብ የልደት ሰርተፊኬት፣ ክትባት ሪፖርት እና የቤት ሠነድ ያስፈልጋል።
-montgomeryschoolsmd.org/registration ይጎብኙ ወይም ወደ ት/ቤቱ ቅርብ ቢሮ ያቅርቡ።
+Amharic: ልጅዎ የሚወሰደው አውቶቡስ ቁጥርና ሰዓት ParentVUE ላይ ይታያል።
+አውቶቡስ ካልመጣ ስልክ ቁጥር 301-840-3456 ደውሉ።
 
 
-== 6. KEY CONTACTS (ዋና ዋና ቁጥሮች) ==
+== 5. GRADES & ACADEMIC SUPPORT (ደረጃ እና ትምህርት ድጋፍ) ==
 
-MCPS Main Office:           240-740-3000
-Parent Information Center:  301-279-3391
-Transportation:             301-840-3456
-Special Education:          301-517-5800
-Student Registration:       montgomeryschoolsmd.org/registration
-ParentVUE / StudentVUE:     myMCPS.net
-MCPS Website:               montgomeryschoolsmd.org
+Checking grades:
+- Log into ParentVUE at myMCPS.net to see grades, assignments, and report cards
+- MyMCPS Classroom (portal.mcpsmd.org) shows daily assignments and lessons
 
-Amharic-Speaking Parent Support:
-- The Parent Information Center has Amharic-speaking staff
-- Call 301-279-3391 and ask for Amharic language support
-- Amharic: "አማርኛ ተናጋሪ ሰው ያስፈልጋል" ብለው ይጠይቁ
+Free tutoring options:
+- Stepping Stone Tutoring Program — qualified tutors for personal sessions
+- Montgomery County Public Libraries: Brainfuse HelpNow
+  — live online tutoring daily from 2 PM to 11 PM
+- After School Tutoring (free) at these locations:
+  - New Hampshire Estates Elementary School
+  - Watkins Mill High School
+  - Wheaton High School
+  - Gaithersburg High School
+- Saturday School: George B. Thomas Learning Academy — K-12 tutoring and mentoring
+
+Contact teacher:
+- Send message through ParentVUE messaging
+- Call school main office and leave a message for the teacher
+- Schedule parent-teacher conference through school office
+
+Amharic: ልጅዎ ደረጃ ለማየት myMCPS.net ላይ ParentVUE ይጠቀሙ።
+ነጻ ትምህርት ድጋፍ ለማግኘት ወደ ት/ቤቱ ቢሮ ያናግሩ።
+ቤተ-መጽሐፍቱ ደግሞ ከሰዓት 2 እስከ 11 ድረስ ነጻ ምክር ይሰጣል።
 
 
-== 7. PARENT PORTAL — PARENTVUE (ፓረንት ቪው) ==
+== 6. SCHOOL ANNOUNCEMENTS & CLOSINGS (ማስታወቂያዎች) ==
 
-myMCPS.net — ParentVUE allows parents to:
-- View grades and attendance in real time
-- See school announcements and teacher messages
-- Receive emergency alerts
-- Update your contact information
-- See your child's bus route
+How to receive school announcements:
+- Sign up for alerts through ParentVUE at myMCPS.net
+- Download the MCPS Mobile App (search "MCPS" on iPhone or Android)
+- Visit montgomeryschoolsmd.org
+- Text alerts: text your school code to sign up for SMS updates
 
-To create an account:
-- Visit myMCPS.net and click "Create Account"
-- You will need your child's Student ID (from school office)
-- Or call the school main office for your activation code
+Snow days and emergency school closings:
+- Check montgomeryschoolsmd.org first
+- Local TV channels: WUSA9, NBC4, ABC7
+- Sign up for emergency text alerts through ParentVUE
 
-Amharic: ParentVUE ለመከፈት myMCPS.net ይጎብኙ። ልጅዎ የተማሪ ቁጥር ወይም ት/ቤቱ ቢሮ
-ይሰጡዎታል።
+Amharic: ት/ቤት ዝጋት ወይም ዘግይቶ ለማወቅ ParentVUE ይጠቀሙ።
+ወይም montgomeryschoolsmd.org ይጎብኙ።
+
+
+== 7. SPECIAL EDUCATION (ልዩ ትምህርት) ==
+
+Services available:
+- Autism Spectrum Disorders (ASD) support
+- Deaf and Hard of Hearing programs
+- Speech and language services
+- Physical disabilities support
+- Vision services
+- Extended School Year (ESY)
+- Transition services for secondary students
+
+IEP (Individualized Education Program):
+- Parents are essential partners in IEP meetings
+- Bring current IEP documents when enrolling a new student
+
+MCPS Family Support Center:
+- Helps parents understand special education rights
+- Provides community resources and disability information
+- Helps resolve concerns between families and schools
+
+Spring Special Education Resource Fair: May 9, 2026
+
+Contacts:
+- Special Education: 301-517-5800
+- MCPS Family Support Center: montgomeryschoolsmd.org/departments/special-education
+
+Amharic: ልጅዎ ልዩ ትምህርት ካስፈለጋቸው ስልክ ቁጥር 301-517-5800 ደውሉ።
+
+
+== 8. STUDENT SUPPORT & MENTAL HEALTH (የተማሪ ድጋፍ) ==
+
+School counseling:
+- Every elementary, middle, and high school has certified counselors
+- Support for academic planning, personal growth, and college readiness
+
+Mental health crisis:
+- Call or text 988 (free, 24 hours)
+- Well-Being Social Workers available at every school
+
+Bullying reporting:
+- Safe Schools Maryland Hotline: 833-632-7233
+- Anonymous "Say Something" reporting available
+- Bullying report form at montgomeryschoolsmd.org
+
+Child abuse reporting:
+- Emergency: Call 911
+- Child Welfare Services (24 hours): 240-777-4417
+- Child Sexual Abuse: 240-773-5400
+
+Amharic: ልጅዎ ችግር ካለ ወይም ቡሊንግ ካጋጠማቸው ወደ ት/ቤቱ ካውንሰለር ያናግሩ።
+ድንገተኛ ሁኔታ ካለ 911 ወይም 988 ደውሉ።
+
+
+== 9. SCHOOL LUNCH (የምሳ አገልግሎት) ==
+
+How to see the menu:
+- Visit MealViewer platform (no login needed) — search "MCPS MealViewer"
+- Or download the MealViewer app on iPhone or Android
+- Shows school-specific menus, nutrition info, and allergen filters
+
+Payment:
+- MySchoolBucks account: mcpsmd.schoolcashonline.com
+- Cash also accepted
+
+All menus meet USDA and Maryland nutrition standards.
+
+Amharic: ልጅዎ ምሳ ምናሌ ለማየት MealViewer ይጠቀሙ።
+ክፍያ ለማድረግ mcpsmd.schoolcashonline.com ይጎብኙ።
+
+
+== 10. COLLEGE & CAREER PLANNING (ኮሌጅ እና ሥራ ዝግጅት) ==
+
+Available for high school students:
+- Naviance: primary college and career planning platform (available through school)
+- College and Career Center: montgomeryschoolsmd.org/curriculum/careercenter
+- CTE (Career & Technical Education) courses at every high school
+  — earn college credit and industry certifications
+
+Financial Aid:
+- FAFSA guidance available through school counselors
+- Scholarship search resources
+- Support for undocumented students (Maryland Dream Act)
+
+Events:
+- "MCPS Let's Talk Careers" — monthly live speaker series
+- College and Career Readiness Forums for grades 9-12
+
+Amharic: ልጅዎ ኮሌጅ እቅድ ካስፈለጋቸው ወደ ት/ቤቱ ካውንሰለር ያናግሩ።
+
+
+== 11. SAFETY & CYBERSAFETY (ደህንነት) ==
+
+School safety contact: 240-740-3066
+Safe Schools Maryland Hotline: 833-632-7233
+
+Online safety:
+- MCPS teaches students digital safety and cybersecurity
+- Resources for parents at montgomeryschoolsmd.org/cybersafety
+- Common Sense Media guides available for families
+
+Report online safety concerns:
+- Contact your child's school
+- CyberTipline for serious incidents
+
+
+== 12. KEY CONTACTS (ዋና ዋና ቁጥሮች) ==
+
+MCPS Main Office:               240-740-3000
+Spanish Language Line:          240-740-2845
+Email MCPS:                     ASKMCPS@mcpsmd.org
+International Admissions:       240-740-4500
+Boundary / School Assignment:   240-740-7725
+Transportation:                 301-840-3456
+Special Education:              301-517-5800
+School Safety:                  240-740-3066
+Tech Support (ParentVUE):       communitytechsupport@mcpsmd.org
+Child Welfare (24 hours):       240-777-4417
+Safe Schools Hotline:           833-632-7233
+Mental Health Crisis:           988
+
+MCPS Website:                   montgomeryschoolsmd.org
+Parent Portal:                  myMCPS.net / md-mcps-psv.edupoint.com
+School Lunch Payment:           mcpsmd.schoolcashonline.com
+School Assignment Tool:         montgomeryschoolsmd.org/info/enroll
+
+Amharic speaking staff:
+- Call 240-740-3000 and say "አማርኛ ተናጋሪ ሰው ያስፈልጋል"
+- Parent Information Center: 301-279-3391
 
 
 == FAQS ==
 
 Q: How do I report my child absent?
-A: Call your child's school by 9 AM and press the attendance line. You can also report online through ParentVUE at myMCPS.net.
-
-Q: My child's school is closed — where do I find out?
-A: Check montgomeryschoolsmd.org, the MCPS App, or your local TV news (WUSA9, NBC4, ABC7).
+A: Call your child's school before 9 AM. You can also use ParentVUE at myMCPS.net.
 
 Q: How do I check my child's grades?
-A: Log into ParentVUE at myMCPS.net to see grades, assignments, and attendance.
-
-Q: I need help and I only speak Amharic.
-A: Call the Parent Information Center at 301-279-3391 and ask for Amharic language support.
-
-Q: How do I register my child in MCPS?
-A: Visit montgomeryschoolsmd.org/registration. Bring birth certificate, immunization records, and proof of address.
+A: Log into ParentVUE at myMCPS.net. All grades and assignments are listed there.
 
 Q: How do I find my child's bus stop and time?
 A: Log into ParentVUE at myMCPS.net and go to the Transportation section.
 
-Q: Who do I contact for special education services?
-A: Call MCPS Special Education at 301-517-5800.
+Q: How do I register a new student?
+A: Visit montgomeryschoolsmd.org/info/enroll. You need a birth certificate, immunization records, and proof of address.
+
+Q: My child needs a tutor. What is available for free?
+A: Free tutoring is available through Montgomery County Libraries (Brainfuse HelpNow, daily 2-11 PM) and after-school programs at several schools.
+
+Q: I only speak Amharic. Who can help me?
+A: Call 240-740-3000 and ask for Amharic language support. Say "አማርኛ ተናጋሪ ሰው ያስፈልጋል."
+
+Q: School is closed today. Where do I find out?
+A: Check montgomeryschoolsmd.org, the MCPS App, or TV channels WUSA9, NBC4, or ABC7.
+
+Q: My child has special needs. Who do I contact?
+A: Call MCPS Special Education at 301-517-5800 or visit montgomeryschoolsmd.org/departments/special-education.
+
+Q: How do I create a ParentVUE account?
+A: Visit myMCPS.net, click "Create Account," and enter your child's Student ID. Or call your school office for an activation code.
+
+Q: How do I pay for school lunch?
+A: Use MySchoolBucks at mcpsmd.schoolcashonline.com. Cash is also accepted.
+
+Q: My child is being bullied. What should I do?
+A: Contact your child's school counselor. You can also call the Safe Schools Maryland Hotline at 833-632-7233 anonymously.
+
+Q: I have an immigration concern. Can MCPS help?
+A: MCPS hosts immigration support workshops. Call 240-740-3000 or visit Parent Academy at montgomeryschoolsmd.org/departments/parentacademy.
