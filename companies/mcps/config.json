@@ -1,0 +1,13 @@
+{
+  "id": "mcps",
+  "name": "Montgomery County Public Schools",
+  "phone": "240-740-3000",
+  "address": "850 Hungerford Drive, Rockville, MD 20850",
+  "website": "montgomeryschoolsmd.org",
+  "hours": "Mon-Fri 8AM-4:30PM | Sat-Sun Closed",
+  "language": "bilingual",
+  "twilio_numbers": ["+13013047045"],
+  "ghl_webhook_url": "https://services.leadconnectorhq.com/hooks/9wQflPh78yCTVycvmLDJ/webhook-trigger/21b6788f-b7ff-4e30-b9f7-df19d785a513",
+  "greeting_amharic": "ሰላም! ወደ ሞንትጎመሪ ካውንቲ ትምህርት ቤቶች እንኳን ደህና መጡ። እንዴት ልረዳዎ እችላለሁ?",
+  "greeting_english": "Hello! Welcome to Montgomery County Public Schools. How can I help you today?"
+}
