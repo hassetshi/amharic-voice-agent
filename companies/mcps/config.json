@@ -9,5 +9,5 @@
   "twilio_numbers": ["+13013047045"],
   "ghl_webhook_url": "https://services.leadconnectorhq.com/hooks/9wQflPh78yCTVycvmLDJ/webhook-trigger/21b6788f-b7ff-4e30-b9f7-df19d785a513",
   "greeting_amharic": "ሰላም! ወደ ሞንትጎመሪ ካውንቲ ትምህርት ቤቶች እንኳን ደህና መጡ። እንዴት ልረዳዎ እችላለሁ?",
-  "greeting_english": "Hello! Welcome to Montgomery County Public Schools. How can I help you today?"
+  "greeting_english": "Hello, welcome to Montgomery County Public Schools. How can I help you today?"
 }

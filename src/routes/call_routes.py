@@ -175,19 +175,28 @@ async def media_stream(websocket: WebSocket, call_sid: str):
     stt_lang = _STT_LANG.get(session.language, "am-ET")
     print(f"[PIPELINE] Language={session.language} | STT={stt_lang}")
 
-    stream_sid    = None
-    audio_buffer  = bytearray()
-    silent_chunks = 0
-    speech_chunks = 0
-    in_speech     = False
-    processing    = False     # prevent overlapping STT calls
+    stream_sid       = None
+    audio_buffer     = bytearray()
+    silent_chunks    = 0
+    speech_chunks    = 0
+    in_speech        = False
+    processing       = False     # prevent overlapping STT calls
+    agent_speaking   = False     # suppress caller audio while agent TTS is playing
 
     async def send_audio(audio_bytes: bytes):
+        nonlocal agent_speaking
         if audio_bytes and stream_sid:
+            agent_speaking = True
             await websocket.send_json({
                 "event": "media",
                 "streamSid": stream_sid,
                 "media": {"payload": audio_to_base64(audio_bytes)},
+            })
+            # Mark event — Twilio echoes it back when playback is done
+            await websocket.send_json({
+                "event": "mark",
+                "streamSid": stream_sid,
+                "mark": {"name": "agent_done"},
             })
 
     async def process_utterance(audio: bytes):
@@ -247,7 +256,23 @@ async def media_stream(websocket: WebSocket, call_sid: str):
                     print(f"[AI]  🤖 Greeting: {greeting}")
                     await send_audio(text_to_speech(greeting, session.language))
 
+            elif event == "mark":
+                # Twilio echoes this back when our TTS audio has finished playing
+                mark_name = data.get("mark", {}).get("name", "")
+                if mark_name == "agent_done":
+                    agent_speaking = False
+                    # Discard any audio buffered while agent was speaking (its own echo)
+                    audio_buffer.clear()
+                    silent_chunks = 0
+                    speech_chunks = 0
+                    in_speech = False
+                    print("[VAD] Agent done speaking — listening for caller")
+
             elif event == "media":
+                # While agent is speaking, Twilio echoes TTS back — ignore it
+                if agent_speaking:
+                    continue
+
                 chunk  = base64.b64decode(data["media"]["payload"])
                 energy = _mulaw_energy(chunk)
 

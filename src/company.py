@@ -27,6 +27,7 @@ class Company:
     greeting_amharic: str
     greeting_english: str
     knowledge:        str = ""     # full text of knowledge.txt
+    prompt:           str = ""     # full system prompt from prompt.txt (overrides generic builder)
     rag:              object = None  # RAGIndex built at startup
 
 
@@ -53,6 +54,12 @@ def _load_all():
             if kb_path.exists():
                 knowledge = kb_path.read_text(encoding="utf-8")
 
+            # Read custom system prompt (optional — overrides generic builder)
+            custom_prompt = ""
+            prompt_path = company_dir / "prompt.txt"
+            if prompt_path.exists():
+                custom_prompt = prompt_path.read_text(encoding="utf-8")
+
             # Override ghl_webhook_url from env if set
             env_key = f"GHL_WEBHOOK_URL_{cfg['id'].upper()}"
             ghl_url  = os.getenv(env_key) or cfg.get("ghl_webhook_url", "") or os.getenv("GHL_WEBHOOK_URL", "")
@@ -70,6 +77,7 @@ def _load_all():
                 greeting_amharic = cfg.get("greeting_amharic", ""),
                 greeting_english = cfg.get("greeting_english", ""),
                 knowledge        = knowledge,
+                prompt           = custom_prompt,
             )
             # Build RAG index from knowledge base
             if knowledge:

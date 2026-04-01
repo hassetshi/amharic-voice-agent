@@ -49,6 +49,11 @@ async def generate_response(session: CallSession, user_text: str,
         messages = [{"role": "user", "content": "START_CALL_GREETING"}] + messages
 
     if is_greeting:
+        # Use configured greeting directly — ensures exact phrasing is read
+        if session.language == "english" and company and company.greeting_english:
+            return company.greeting_english
+        if company and company.greeting_amharic:
+            return company.greeting_amharic
         messages.append({"role": "user", "content": "START_CALL_GREETING"})
     else:
         messages.append({"role": "user", "content": user_text})
@@ -273,7 +278,7 @@ def format_for_speech(text: str) -> str:
     text = re.sub(r'\n+', ' ', text)
 
     # ── 2. Add natural pause after Amharic transition words ───────────────
-    for word in ('ጥሩ', 'እሺ', 'ሰላም', 'አዎ', 'እናም', 'ስለዚህ', 'እንግዲህ', 'ደህና'):
+    for word in ('ጥሩ', 'እሺ', 'ሰላም', 'አዎ', 'እናም', 'ስለዚህ', 'እንግዲህ'):
         text = re.sub(rf'({re.escape(word)})\s+(?![፣།።])', rf'\1፣ ', text)
 
     # ── 3. Add natural pause after English transition words ───────────────
