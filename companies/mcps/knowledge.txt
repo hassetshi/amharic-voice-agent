@@ -1,4 +1,4 @@
-== ABOUT MONTGOMERY COUNTY PUBLIC SCHOOLS (ስለ ሞንትጎመሪ ካውንቲ ት/ቤቶች) ==
+== ABOUT MONTGOMERY COUNTY PUBLIC SCHOOLS (ስለ ሞንትጎመሪ ካውንቲ ትምህርት ቤቶች) ==
 
 Montgomery County Public Schools (MCPS) serves over 160,000 students across 200+ schools
 in Montgomery County, Maryland. This voice assistant helps Amharic-speaking parents
@@ -32,7 +32,7 @@ How to create an account:
 - Or call your school's main office for an activation code
 
 Amharic: ParentVUE ለመከፈት myMCPS.net ይጎብኙ።
-ልጅዎ የተማሪ ቁጥር ወይም ት/ቤቱ ቢሮ ያስፈልጋል።
+ልጅዎ የተማሪ ቁጥር ወይም ትምህርት ቤቱ ቢሮ ያስፈልጋል።
 ስልክ ቁጥር 240-740-3000 ደውለው እርዳታ ይጠይቁ።
 
 Tech support for ParentVUE:
@@ -57,7 +57,7 @@ Unexcused absences:
 - Missing school without calling or reporting
 - 3 or more unexcused absences — school will contact the family
 
-Amharic: ልጅዎ ት/ቤት ካልሄደ፣ ከጠዋቱ 9 ሰዓት በፊት ወደ ት/ቤቱ ደውሉ።
+Amharic: ልጅዎ ትምህርት ቤት ካልሄደ፣ ከጠዋቱ 9 ሰዓት በፊት ወደ ትምህርት ቤቱ ደውሉ።
 ወይም myMCPS.net ላይ ParentVUE ተጠቀሙ።
 ሳይደውሉ ቢቀሩ ቀጠሮው ያልተፈቀደ ይሆናል።
 
@@ -141,7 +141,7 @@ Contact teacher:
 - Schedule parent-teacher conference through school office
 
 Amharic: ልጅዎ ደረጃ ለማየት myMCPS.net ላይ ParentVUE ይጠቀሙ።
-ነጻ ትምህርት ድጋፍ ለማግኘት ወደ ት/ቤቱ ቢሮ ያናግሩ።
+ነጻ ትምህርት ድጋፍ ለማግኘት ወደ ትምህርት ቤቱ ቢሮ ያናግሩ።
 ቤተ-መጽሐፍቱ ደግሞ ከሰዓት 2 እስከ 11 ድረስ ነጻ ምክር ይሰጣል።
 
 
@@ -158,7 +158,7 @@ Snow days and emergency school closings:
 - Local TV channels: WUSA9, NBC4, ABC7
 - Sign up for emergency text alerts through ParentVUE
 
-Amharic: ት/ቤት ዝጋት ወይም ዘግይቶ ለማወቅ ParentVUE ይጠቀሙ።
+Amharic: ትምህርት ቤት ዝጋት ወይም ዘግይቶ ለማወቅ ParentVUE ይጠቀሙ።
 ወይም montgomeryschoolsmd.org ይጎብኙ።
 
 
@@ -211,7 +211,7 @@ Child abuse reporting:
 - Child Welfare Services (24 hours): 240-777-4417
 - Child Sexual Abuse: 240-773-5400
 
-Amharic: ልጅዎ ችግር ካለ ወይም ቡሊንግ ካጋጠማቸው ወደ ት/ቤቱ ካውንሰለር ያናግሩ።
+Amharic: ልጅዎ ችግር ካለ ወይም ቡሊንግ ካጋጠማቸው ወደ ትምህርት ቤቱ ካውንሰለር ያናግሩ።
 ድንገተኛ ሁኔታ ካለ 911 ወይም 988 ደውሉ።
 
 
@@ -249,7 +249,7 @@ Events:
 - "MCPS Let's Talk Careers" — monthly live speaker series
 - College and Career Readiness Forums for grades 9-12
 
-Amharic: ልጅዎ ኮሌጅ እቅድ ካስፈለጋቸው ወደ ት/ቤቱ ካውንሰለር ያናግሩ።
+Amharic: ልጅዎ ኮሌጅ እቅድ ካስፈለጋቸው ወደ ትምህርት ቤቱ ካውንሰለር ያናግሩ።
 
 
 == 11. SAFETY & CYBERSAFETY (ደህንነት) ==

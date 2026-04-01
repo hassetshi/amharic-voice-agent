@@ -197,6 +197,13 @@ def normalize_for_speech(text: str) -> str:
     - Dashes inside phone numbers stripped before digitizing
     """
 
+    # ── 0. Amharic abbreviation expansion ────────────────────────────────
+    # "ት/ቤቱ" / "ት/ቤት" → full words so "/" is never read as "slash"
+    text = text.replace("ት/ቤቱ", "ትምህርት ቤቱ")
+    text = text.replace("ት/ቤቶቹ", "ትምህርት ቤቶቹ")
+    text = text.replace("ት/ቤቶች", "ትምህርት ቤቶች")
+    text = text.replace("ት/ቤት", "ትምህርት ቤት")
+
     # ── 1. Phone numbers → digit-by-digit ────────────────────────────────
     def _digits(m: re.Match) -> str:
         digits = re.sub(r'\D', '', m.group(0))
