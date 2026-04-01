@@ -188,6 +188,72 @@ def _route_tts(text: str, mulaw: bool) -> bytes:
     return b"".join(parts)
 
 
+def normalize_for_speech(text: str) -> str:
+    """Pre-process text BEFORE clean_for_tts so phone numbers and URLs are spoken correctly.
+
+    Rules applied:
+    - Phone numbers  → digit-by-digit with spaces  e.g. "2 4 0  7 4 0  3 0 0 0"
+    - URLs           → dots become "dot", slashes become "slash"
+    - Dashes inside phone numbers stripped before digitizing
+    """
+
+    # ── 1. Phone numbers → digit-by-digit ────────────────────────────────
+    def _digits(m: re.Match) -> str:
+        digits = re.sub(r'\D', '', m.group(0))
+        if digits.startswith('1') and len(digits) == 11:
+            digits = digits[1:]   # strip US country code
+        if len(digits) == 10:
+            # Area code  exchange  number — wider gap between groups
+            return (
+                ' '.join(digits[0:3]) + ',  '
+                + ' '.join(digits[3:6]) + ',  '
+                + ' '.join(digits[6:10])
+            )
+        return ' '.join(digits)   # fallback: space every digit
+
+    # Match common US phone formats: (240) 641-1515 / 240-641-1515 / 2406411515
+    text = re.sub(
+        r'\+?1?[-.\s]?\(?\d{3}\)?[-.\s]\d{3}[-.\s]\d{4}',
+        _digits, text
+    )
+    # Also catch plain 10-digit blocks not yet formatted
+    text = re.sub(
+        r'\b(\d{3})(\d{3})(\d{4})\b',
+        lambda m: (
+            ' '.join(m.group(1)) + ',  '
+            + ' '.join(m.group(2)) + ',  '
+            + ' '.join(m.group(3))
+        ),
+        text
+    )
+
+    # ── 2. URLs → replace . with "dot" and / with "slash" ────────────────
+    url_pattern = re.compile(
+        r'(?:https?://)?(?:www\.)?'           # optional protocol/www
+        r'[\w][\w\-]*'                        # domain name
+        r'(?:\.[\w\-]+)+'                     # .tld or sub-domains
+        r'(?:/[\w./\-?=%&]*)?',               # optional path
+        re.IGNORECASE
+    )
+
+    def _url(m: re.Match) -> str:
+        u = m.group(0)
+        u = re.sub(r'https?://', '', u)       # remove protocol
+        u = u.replace('www.', 'www dot ')
+        u = re.sub(r'/', ' slash ', u)        # / → slash
+        u = re.sub(r'\.', ' dot ', u)         # . → dot
+        u = re.sub(r' {2,}', ' ', u)
+        return u.strip()
+
+    text = url_pattern.sub(_url, text)
+
+    # ── 3. Any remaining lone slash or @ ─────────────────────────────────
+    text = text.replace('/', ' slash ')
+    text = text.replace('@', ' at ')
+
+    return text
+
+
 def format_for_speech(text: str) -> str:
     """Format LLM output for natural-sounding Amharic/English TTS.
 
@@ -270,8 +336,9 @@ def text_to_speech(text: str, language: str = "auto") -> bytes:
     language="bilingual"→ per-line auto-detect, Google TTS for both
     language="auto"     → auto-detect from text content
     """
-    text = clean_for_tts(text)       # remove emojis / markdown
-    text = format_for_speech(text)   # add natural pauses, shorten sentences
+    text = normalize_for_speech(text) # phones digit-by-digit, URLs with "dot"
+    text = clean_for_tts(text)        # remove emojis / markdown
+    text = format_for_speech(text)    # add natural pauses, shorten sentences
     if not text:
         return b""
     if language == "amharic":

@@ -60,10 +60,18 @@ def build_amharic_prompt(company: "Company") -> str:
 - ቀላልና ተፈጥሯዊ አማርኛ ብቻ — ጥንታዊ ቃላት አትጠቀም
 - ኢሞጂ፣ ምልክቶች (**  ##  --  •) ፈጽሞ አትጠቀም
 - ቃለ አጋኖ (!) ወይም ጥያቄ ምልክት (?) ፈጽሞ አትጠቀም — ። ወይም ፣ ብቻ ተጠቀም
-- ቅንፍ () ወይም ሌሎች ምልክቶች አትጠቀም — ድምጽ ስለሆነ ይነበባሉ
+- ቅንፍ ()፣ ቅንፍ []፣ slash / እና ሌሎች ምልክቶች አትጠቀም — ድምጽ ስለሆነ ይነበባሉ
 - ከ2 ዓረፍተ ነገር አታልፍ
 - የደዋዩ ስልክ ቁጥር ቀድሞ ተመዝግቧል — ፈጽሞ አትጠይቅ
-- ያላወቅህውን ጥያቄ ከተጠየቅህ: "ባለሙያ ይደውሉሎታል።" በል"""
+- ያላወቅህውን ጥያቄ ከተጠየቅህ: "ባለሙያ ይደውሉሎታል።" በል
+
+══════════════════════════════════════
+ስልክ ቁጥርና ድረ-ገጽ አያያዝ:
+══════════════════════════════════════
+- ስልክ ቁጥር ሲናገሩ ቁጥሩን ሙሉ አታቅርብ — ቁጥሩን ሁሉ ደረጃ በደረጃ ናቸው: "2 4 0  7 4 0  3 0 0 0"
+- ዩአርኤል (URL) ሲናገሩ ። ወይም dot ብቻ ተጠቀም — Amharic ነጥብ አትጠቀም
+- አማርኛ ቃሎችን ሙሉ ቃሉን ናቸው — ቃሉን ሰበር አታደርግ
+- STT ቃሉን ሰብሮ ቢልክ፣ ትርጉሙን ግምት አድርግ — ቃሉን ሙሉ አድርገህ ምለሽ ስጥ"""
 
 
 def build_english_prompt(company: "Company") -> str:
@@ -169,12 +177,21 @@ SPEECH STYLE RULES (apply in BOTH languages):
   English: "Sure, we can help... what do you need?"
 - Sound conversational — NOT formal or written
 - NO emojis, NO markdown (**, ##, --, •, bullets)
-- NO exclamation marks (!) — NEVER use ! in any response — use . or ። only
-- NO question marks (?) in Amharic — use ። instead
+- NO exclamation marks (!) — use . only
+- NO question marks (?) in Amharic responses — use ። instead
 - NO parentheses () or brackets [] — they are spoken aloud by TTS
+- NO slashes / in responses — they are spoken aloud
 - The caller's phone is ALREADY captured — NEVER ask for it
 - Collect: name and what they need
-- Unknown question → "A specialist will call you back." / "ባለሙያ ይደውሉሎታል።" """
+- Unknown question → "A specialist will call you back." / "ባለሙያ ይደውሉሎታል።"
+
+PHONE & URL RULES (CRITICAL):
+- NEVER write a phone number as a full number like "2407403000"
+  Always write with dashes: "240-740-3000" so it reads digit-by-digit
+- NEVER translate a URL into Amharic. Keep it in English: "montgomeryschoolsmd dot org"
+- NEVER split Amharic words — write each complete word
+- If STT input has broken Amharic syllables, reconstruct the full word before answering
+- If caller uses mixed Amharic+English, respond in their main language"""
 
 
 def get_system_prompt(company: "Company", language: str) -> str:
